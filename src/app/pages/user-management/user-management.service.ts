@@ -18,7 +18,7 @@ export class UserManagementService {
     if (where?.email) {
       whereCondition['email'] = where.email;
     }
-    return this.http.get('/api/management-user/count', {
+    return this.http.get('/management-user/count', {
       params: {
         where: JSON.stringify(whereCondition)
       }
@@ -34,7 +34,7 @@ export class UserManagementService {
     if (where?.email) {
       whereCondition['email'] = where.email;
     }
-    return this.http.get('/api/management-user', {
+    return this.http.get('/management-user', {
       params: {
         filter: JSON.stringify({ skip, limit, where: whereCondition })
       }
@@ -43,14 +43,14 @@ export class UserManagementService {
 
   public patch(data) {
     return this.http.patch(
-      `/api/management-user/${data.id}`,
+      `/management-user/${data.id}`,
       _.omit({ ...data }, 'roles')
     );
   }
 
   public post(data) {
     return this.http.post(
-      `/api/management-user`,
+      `/management-user`,
       _.omit({ ...data }, 'roles')
     );
   }

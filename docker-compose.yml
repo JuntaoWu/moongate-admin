@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+  moongate_admin:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: cepheus990910/moongate_admin:${MOONGATE_ADMIN_VERSION_TAG}
+    environment:
+      REPLACE_ENV: REPLACE
+      BASE_VIRTUAL_PATH: admin
+      API_ENV: /api

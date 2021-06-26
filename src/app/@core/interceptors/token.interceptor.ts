@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NbAuthService } from '@nebular/auth';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -25,7 +26,8 @@ export class TokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const req = request.clone(
       {
-        headers: request.headers.set('Authorization', `Bearer ${this.accessToken}`)
+        headers: request.headers.set('Authorization', `Bearer ${this.accessToken}`),
+        url: request.url.startsWith('http') ? request.url : `${environment.api}${request.url}`
       }
     );
     return next.handle(req);

@@ -11,7 +11,7 @@ export class ReleaseService {
   constructor(private http: HttpClient) { }
 
   getReleases(limit: number, skip: number, filter: any): Observable<any[]> {
-    return this.http.get('/api/orders', {
+    return this.http.get('/orders', {
       params: {
         filter: JSON.stringify({
           limit: limit,
@@ -30,7 +30,7 @@ export class ReleaseService {
 
   getReleaseLength(filter: any): Observable<any> {
 
-    return this.http.get('/api/orders/count', {
+    return this.http.get('/orders/count', {
       params: {
         "where": JSON.stringify(filter)
       }
@@ -43,7 +43,7 @@ export class ReleaseService {
   }
 
   deleteRelease(orderId: string): Observable<any> {
-    return this.http.delete(`/api/orders/${orderId}`)
+    return this.http.delete(`/orders/${orderId}`)
       .pipe(map(
         (m: any) => {
           return m;
@@ -56,7 +56,7 @@ export class ReleaseService {
 
   getUserList(filter: any): Observable<any> {
 
-    return this.http.get('/api/management-user', {
+    return this.http.get('/management-user', {
       params: {
         "where": JSON.stringify(filter)
       }
@@ -69,7 +69,7 @@ export class ReleaseService {
   }
 
   createRelease(postData: any): Observable<any> {
-    return this.http.post('/api/orders', postData)
+    return this.http.post('/orders', postData)
       .pipe(map(
         (m: any) => {
           return m;

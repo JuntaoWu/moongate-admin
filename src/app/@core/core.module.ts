@@ -110,7 +110,7 @@ export const NB_CORE_PROVIDERS = [
 
     strategies: [
       NbPasswordAuthStrategy.setup({
-        baseEndpoint: 'api/',
+        baseEndpoint: '/',
         name: 'email',
         token: {
           class: NbAuthJWTToken,
@@ -121,7 +121,7 @@ export const NB_CORE_PROVIDERS = [
         },
         logout: {
           alwaysFail: true,
-          resetPasswordTokenKey: 'token',
+          resetPasswordTokenKey: 'data.token',
           redirect: {
             success: '/auth/login',
             failure: '/auth/login'

@@ -15,7 +15,7 @@ export class UserService extends UserData {
 
   getUsers(): Observable<User[]> {
 
-    return this.http.get('/api/whoAmI')
+    return this.http.get('/whoAmI')
       .pipe(map(
         (m: any) => {
           return [{

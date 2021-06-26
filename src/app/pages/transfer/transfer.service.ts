@@ -11,7 +11,7 @@ export class TransferService {
   constructor(private http: HttpClient) { }
 
   getTransfers(limit: number, skip: number, filter: any): Observable<any[]> {
-    return this.http.get('/api/transfer/admin', {
+    return this.http.get('/transfer/admin', {
       params: {
         filter: JSON.stringify({
           limit: limit,
@@ -30,7 +30,7 @@ export class TransferService {
 
   getTransferLength(filter: any): Observable<any> {
 
-    return this.http.get('/api/transfer/count/admin', {
+    return this.http.get('/transfer/count/admin', {
       params: {
         "where": JSON.stringify(filter)
       }
@@ -44,7 +44,7 @@ export class TransferService {
 
 
   deleteTransfer(orderId: string): Observable<any> {
-    return this.http.delete(`/api/transfer/${orderId}`)
+    return this.http.delete(`/transfer/${orderId}`)
       .pipe(map(
         (m: any) => {
           return m;
@@ -57,7 +57,7 @@ export class TransferService {
 
   getUserList(filter: any): Observable<any> {
 
-    return this.http.get('/api/management-user', {
+    return this.http.get('/management-user', {
       params: {
         "where": JSON.stringify(filter)
       }
@@ -70,7 +70,7 @@ export class TransferService {
   }
 
   createTransfer(postData: any): Observable<any> {
-    return this.http.post('/api/transfer/admin', postData)
+    return this.http.post('/transfer/admin', postData)
       .pipe(map(
         (m: any) => {
           return m;
