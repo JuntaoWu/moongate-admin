@@ -8,12 +8,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule, } from '@angular/material/form-field';
 import { OrderDeleteConfirmComponent } from './order-delete-confirm/order-delete-confirm.component';
 import { MatDialogModule,MatDialogClose } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input'
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { OrderCreateComponent } from './order-create/order-create.component'
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 
 
 @NgModule({
-  declarations: [OrderComponent, OrderDeleteConfirmComponent],
+  declarations: [OrderComponent, OrderDeleteConfirmComponent, OrderCreateComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -22,7 +26,9 @@ import { MatInputModule } from '@angular/material/input'
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule
   ]
 })
 export class OrderModule { }

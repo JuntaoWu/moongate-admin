@@ -12,7 +12,7 @@ export class OrderDeleteConfirmComponent implements OnInit {
   ngOnInit(): void {
 
   }
-  onConfirmClick() {
+  onCancelClick() {
     this.dialogRef.close();
   }
 }

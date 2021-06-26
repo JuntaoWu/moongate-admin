@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { OrderService } from './order.service';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderDeleteConfirmComponent } from './order-delete-confirm/order-delete-confirm.component';
+import { OrderCreateComponent } from './order-create/order-create.component';
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'ngx-order',
@@ -22,7 +24,7 @@ export class OrderComponent implements OnInit {
   public currentFilter: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private orderService: OrderService, public dialog: MatDialog) {
+  constructor(private orderService: OrderService, public dialog: MatDialog,private _snackBar: MatSnackBar) {
     this.currentFilter = {
       "status": "ACTIVE",
       "orderType": "PURCHASE"
@@ -57,7 +59,16 @@ export class OrderComponent implements OnInit {
   }
 
   onNewOrder() {
-
+    const dialogRef = this.dialog.open(OrderCreateComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      this.currentLength = this.orderService.getOrderLength(this.currentFilter);
+      this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
+        this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
+        const availableOrder = data;
+        this.dataSource = new MatTableDataSource<any>(availableOrder);
+        this.dataSource.paginator = this.paginator;
+      })
+    })
   }
 
   onDeleteOrder(order: any) {
@@ -65,13 +76,21 @@ export class OrderComponent implements OnInit {
       data: order
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
-        this.orderService.deleteOrder(order.id).subscribe(data=>{
+      if (result) {
+        this.orderService.deleteOrder(order.id).subscribe((data) => {
           this.currentLength = this.orderService.getOrderLength(this.currentFilter);
-          this.orderService.getOrders(this.limit, this.skip,this.currentFilter).subscribe(data => {
+          this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
             this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
             const availableOrder = data;
             this.dataSource = new MatTableDataSource<any>(availableOrder);
+            this.dataSource.paginator = this.paginator;
+          })
+        }, (error) => {
+          console.error(`error: ${error}`);
+          this._snackBar.open("create new order failed", "dismiss", {
+            horizontalPosition: "center",
+            verticalPosition: "top",
+            duration: 3000
           })
         })
       }
@@ -79,31 +98,34 @@ export class OrderComponent implements OnInit {
   }
 
   onSearchOrder() {
-    if(this.currentUserName){
+    if (this.currentUserName) {
       this.currentFilter = {
         ...this.currentFilter,
-        username: this.currentUserName
+        username: this.currentUserName,
       }
     }
-    else{
+    else {
       delete this.currentFilter['username']
     }
 
-    if(this.currentReocrdNumber) {
+    if (this.currentReocrdNumber) {
       this.currentFilter = {
         ...this.currentFilter,
-        recordNumber: this.currentReocrdNumber
+        recordNumber: this.currentReocrdNumber,
       }
     }
-    else{
+    else {
       delete this.currentFilter['recordNumber']
     }
 
+    this.limit = 5;
+    this.skip = 0;
     this.currentLength = this.orderService.getOrderLength(this.currentFilter);
     this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
       this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
       const availableOrder = data;
       this.dataSource = new MatTableDataSource<any>(availableOrder);
+      this.dataSource.paginator = this.paginator;
     })
   }
 

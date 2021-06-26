@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class OrderService {
         filter: JSON.stringify({
           limit: limit,
           skip: skip,
+          order: "createDate desc",
           where: filter
         })
       }
@@ -47,6 +48,37 @@ export class OrderService {
         (m: any) => {
           return m.data;
         }
+      ),catchError((e) => {
+        throw new Error("interal error");
+        
+      }));
+  }
+
+  getUserList(filter: any): Observable<any> {
+
+    return this.http.get('/api/management-user', {
+      params: {
+        "where": JSON.stringify(filter)
+      }
+    })
+      .pipe(map(
+        (m: any) => {
+          return m.data;
+        }
       ));
+  }
+
+  createOrder(postData: any): Observable<any> {
+    return this.http.post('/api/orders', postData)
+      .pipe(map(
+        (m: any) => {
+          return m;
+        }
+      ),
+      catchError((e) => {
+        throw new Error("interal error");
+        
+      })
+      );
   }
 }
