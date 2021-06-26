@@ -47,6 +47,13 @@ export class OrderCreateComponent implements OnInit {
       if (result.data && result.status === 'SUCCESS') {
         this.dialogRef.close();
       }
+      else{
+        this._snackBar.open(result.errorMessage,"dismiss",{
+          horizontalPosition:"center",
+          verticalPosition:"top",
+          duration: 3000
+        })
+      }
     }, (error) => {
       console.error(`error: ${error}`);
       this._snackBar.open("create new order failed","dismiss",{

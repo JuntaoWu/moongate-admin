@@ -7,6 +7,7 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { OrderComponent } from './order/order.component';
 import { ReleaseComponent } from './release/release.component';
+import { TransferComponent } from './transfer/transfer.component';
 
 const routes: Routes = [{
   path: '',
@@ -27,6 +28,10 @@ const routes: Routes = [{
     {
       path: 'release',
       component: ReleaseComponent,
+    },
+    {
+      path: 'transfer',
+      component: TransferComponent,
     },
     {
       path: 'user-management',

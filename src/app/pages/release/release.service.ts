@@ -42,11 +42,11 @@ export class ReleaseService {
       ));
   }
 
-  deleteRelease(orderId: string): Observable<any[]> {
+  deleteRelease(orderId: string): Observable<any> {
     return this.http.delete(`/api/orders/${orderId}`)
       .pipe(map(
         (m: any) => {
-          return m.data;
+          return m;
         }
       ),catchError((e) => {
         throw new Error("interal error");

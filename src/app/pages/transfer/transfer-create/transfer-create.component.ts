@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ReleaseService } from '../release.service';
-
+import { TransferService } from '../transfer.service';
 
 interface User {
   value: string;
@@ -10,21 +9,21 @@ interface User {
 }
 
 @Component({
-  selector: 'ngx-release-create',
-  templateUrl: './release-create.component.html',
-  styleUrls: ['./release-create.component.scss']
+  selector: 'ngx-transfer-create',
+  templateUrl: './transfer-create.component.html',
+  styleUrls: ['./transfer-create.component.scss']
 })
-export class ReleaseCreateComponent implements OnInit {
+export class TransferCreateComponent implements OnInit {
 
   public foods: User[];
   public currentAmount: number;
-  public selectedUser: any;
-  public currentTxId: string;
+  public selectedSenderUser: any;
+  public selectedReceiverUser: any;
   public userList: any
-  constructor(private releaseService: ReleaseService, public dialogRef: MatDialogRef<ReleaseCreateComponent>,private _snackBar: MatSnackBar) { }
+  constructor(private tranferService: TransferService, public dialogRef: MatDialogRef<TransferCreateComponent>,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.releaseService.getUserList({ locked: false }).subscribe(data => {
+    this.tranferService.getUserList({ locked: false }).subscribe(data => {
       this.userList = data.map((m) => {
         return {
           value: m.username,
@@ -35,11 +34,10 @@ export class ReleaseCreateComponent implements OnInit {
   }
 
   onConfirmClick() {
-    this.releaseService.createRelease({
-      username: this.selectedUser,
+    this.tranferService.createTransfer({
+      sender: this.selectedSenderUser,
+      receiver: this.selectedReceiverUser,
       amount: this.currentAmount,
-      txid: this.currentTxId,
-      orderType: "RELEASE"
     }).subscribe((result) => {
       if (result.data && result.status === 'SUCCESS') {
         this.dialogRef.close();

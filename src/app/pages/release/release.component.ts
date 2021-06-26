@@ -34,7 +34,7 @@ export class ReleaseComponent implements OnInit {
   ngOnInit(): void {
     this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
     this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
-      this.displayedColumns = ['position', 'name', 'weight', 'txtid','symbol', 'delete']
+      this.displayedColumns = ['position', 'name', 'weight', 'txtid', 'symbol', 'delete']
       const availableRelease = data;
       this.dataSource = new MatTableDataSource<any>(availableRelease);
       this.dataSource.paginator = this.paginator;
@@ -48,7 +48,7 @@ export class ReleaseComponent implements OnInit {
     this.skip = skip;
     this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
     this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
-      this.displayedColumns = ['position', 'name', 'weight',  'txtid','symbol', 'delete']
+      this.displayedColumns = ['position', 'name', 'weight', 'txtid', 'symbol', 'delete']
       const availableRelease = data;
       this.dataSource = new MatTableDataSource<any>(availableRelease);
     })
@@ -58,8 +58,10 @@ export class ReleaseComponent implements OnInit {
     const dialogRef = this.dialog.open(ReleaseCreateComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
+      this.limit = 5;
+      this.skip = 0;
       this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
-        this.displayedColumns = ['position', 'name', 'weight',  'txtid','symbol', 'delete']
+        this.displayedColumns = ['position', 'name', 'weight', 'txtid', 'symbol', 'delete']
         const availableRelease = data;
         this.dataSource = new MatTableDataSource<any>(availableRelease);
         this.dataSource.paginator = this.paginator;
@@ -73,16 +75,26 @@ export class ReleaseComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.releaseService.deleteRelease(order.id).subscribe((data) => {
-          this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
-          this.limit = 5;
-          this.skip = 0;
-          this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
-            this.displayedColumns = ['position', 'name', 'weight',  'txtid','symbol', 'delete']
-            const availableRelease = data;
-            this.dataSource = new MatTableDataSource<any>(availableRelease);
-            this.dataSource.paginator = this.paginator;
-          })
+        this.releaseService.deleteRelease(order.id).subscribe((deleteResult) => {
+          if (deleteResult.status === 'SUCCESS') {
+            this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
+            this.limit = 5;
+            this.skip = 0;
+            this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
+              this.displayedColumns = ['position', 'name', 'weight', 'txtid', 'symbol', 'delete']
+              const availableRelease = data;
+              this.dataSource = new MatTableDataSource<any>(availableRelease);
+              this.dataSource.paginator = this.paginator;
+            })
+          }
+          else{
+            this._snackBar.open(deleteResult.errorMessage,"dismiss",{
+              horizontalPosition:"center",
+              verticalPosition:"top",
+              duration: 3000
+            })
+          }
+
         }, (error) => {
           console.error(`error: ${error}`);
           this._snackBar.open("create delete release failed", "dismiss", {
@@ -120,7 +132,7 @@ export class ReleaseComponent implements OnInit {
     this.skip = 0;
     this.currentLength = this.releaseService.getReleaseLength(this.currentFilter);
     this.releaseService.getReleases(this.limit, this.skip, this.currentFilter).subscribe(data => {
-      this.displayedColumns = ['position', 'name', 'weight',  'txtid','symbol', 'delete']
+      this.displayedColumns = ['position', 'name', 'weight', 'txtid', 'symbol', 'delete']
       const availableRelease = data;
       this.dataSource = new MatTableDataSource<any>(availableRelease);
       this.dataSource.paginator = this.paginator;

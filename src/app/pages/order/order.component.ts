@@ -24,7 +24,7 @@ export class OrderComponent implements OnInit {
   public currentFilter: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private orderService: OrderService, public dialog: MatDialog,private _snackBar: MatSnackBar) {
+  constructor(private orderService: OrderService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
     this.currentFilter = {
       "status": "ACTIVE",
       "orderType": "PURCHASE"
@@ -62,6 +62,8 @@ export class OrderComponent implements OnInit {
     const dialogRef = this.dialog.open(OrderCreateComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.currentLength = this.orderService.getOrderLength(this.currentFilter);
+      this.limit = 5;
+      this.skip = 0;
       this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
         this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
         const availableOrder = data;
@@ -77,16 +79,26 @@ export class OrderComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.orderService.deleteOrder(order.id).subscribe((data) => {
-          this.currentLength = this.orderService.getOrderLength(this.currentFilter);
-          this.limit = 5;
-          this.skip = 0;
-          this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
-            this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
-            const availableOrder = data;
-            this.dataSource = new MatTableDataSource<any>(availableOrder);
-            this.dataSource.paginator = this.paginator;
-          })
+        this.orderService.deleteOrder(order.id).subscribe((deleteResult) => {
+          if (deleteResult.status === 'SUCCESS') {
+            this.currentLength = this.orderService.getOrderLength(this.currentFilter);
+            this.limit = 5;
+            this.skip = 0;
+            this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
+              this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
+              const availableOrder = data;
+              this.dataSource = new MatTableDataSource<any>(availableOrder);
+              this.dataSource.paginator = this.paginator;
+            })
+          }
+          else{
+            this._snackBar.open(deleteResult.errorMessage,"dismiss",{
+              horizontalPosition:"center",
+              verticalPosition:"top",
+              duration: 3000
+            })
+          }
+
         }, (error) => {
           console.error(`error: ${error}`);
           this._snackBar.open("create delete order failed", "dismiss", {

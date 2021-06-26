@@ -1,11 +1,19 @@
-<h4 mat-dialog-title>Create New Release</h4>
+<h4 mat-dialog-title>Create New Transfer</h4>
 <form name="createForm">
     <div class="row">
         <div class="col-xl-12">
             <div class="col-xl-6">
                 <mat-form-field>
-                    <mat-label>UserName</mat-label>
-                    <mat-select [(value)]="selectedUser">
+                    <mat-label>Send User</mat-label>
+                    <mat-select [(value)]="selectedSenderUser">
+                        <mat-option *ngFor="let user of userList" [value]="user.value">{{user.viewValue}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+                <mat-form-field>
+                    <mat-label>Receiver User</mat-label>
+                    <mat-select [(value)]="selectedReceiverUser">
                         <mat-option *ngFor="let user of userList" [value]="user.value">{{user.viewValue}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -14,12 +22,6 @@
                 <mat-form-field>
                     <mat-label>Ámount</mat-label>
                     <input matInput name="currentAmount" [(ngModel)]="currentAmount" type="number">
-                </mat-form-field>
-            </div>
-            <div class="col-xl-6">
-                <mat-form-field>
-                    <mat-label>TxID</mat-label>
-                    <input matInput name="currentTxId" [(ngModel)]="currentTxId" type="string">
                 </mat-form-field>
             </div>
         </div>
