@@ -5,19 +5,24 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { OrderComponent } from './order.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, } from '@angular/material/form-field';
+import { OrderDeleteConfirmComponent } from './order-delete-confirm/order-delete-confirm.component';
+import { MatDialogModule,MatDialogClose } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input'
 
 
 
 @NgModule({
-  declarations: [OrderComponent],
+  declarations: [OrderComponent, OrderDeleteConfirmComponent],
   imports: [
     CommonModule,
     FormsModule,
     ThemeModule,
     MatTableModule,
     MatPaginatorModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule
   ]
 })
 export class OrderModule { }
