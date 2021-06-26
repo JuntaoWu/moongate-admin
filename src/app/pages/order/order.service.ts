@@ -10,9 +10,9 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  getOrders(limit: number, skip:number, filter: any): Observable<any[]> {
-    return this.http.get('/api/orders',{
-      params:{
+  getOrders(limit: number, skip: number, filter: any): Observable<any[]> {
+    return this.http.get('/api/orders', {
+      params: {
         filter: JSON.stringify({
           limit: limit,
           skip: skip,
@@ -27,20 +27,26 @@ export class OrderService {
       ));
   }
 
-  getOrderLength(): Observable<any> {
+  getOrderLength(filter: any): Observable<any> {
 
     return this.http.get('/api/orders/count', {
       params: {
-        "where": JSON.stringify({
-          "status": "ACTIVE",
-          "orderType": "PURCHASE"
-        })
+        "where": JSON.stringify(filter)
       }
     })
-    .pipe(map(
-      (m: any) => {
-        return m.data.count;
-      }
-    ));
+      .pipe(map(
+        (m: any) => {
+          return m.data.count;
+        }
+      ));
+  }
+
+  deleteOrder(orderId: string): Observable<any[]> {
+    return this.http.delete(`/api/orders/${orderId}`)
+      .pipe(map(
+        (m: any) => {
+          return m.data;
+        }
+      ));
   }
 }
