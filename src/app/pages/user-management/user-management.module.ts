@@ -9,9 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { UserCreateComponent } from './user-create/user-create.component';
 
 @NgModule({
-  declarations: [UserManagementComponent],
+  declarations: [UserManagementComponent, UserEditComponent, UserCreateComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,6 +26,10 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatPaginatorModule,
     MatTableModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatCardModule,
   ],
 })
 export class UserManagementModule { }

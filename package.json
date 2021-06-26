@@ -58,6 +58,7 @@
     "intl": "1.2.5",
     "ionicons": "2.0.1",
     "leaflet": "1.2.0",
+    "lodash": "^4.17.21",
     "nebular-icons": "1.1.0",
     "ng2-ckeditor": "^1.2.9",
     "ng2-smart-table": "^1.6.0",
