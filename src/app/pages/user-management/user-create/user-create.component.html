@@ -8,10 +8,13 @@
                 <input matInput [(ngModel)]="data.email">
             </mat-form-field>
             <mat-form-field appearance="fill" class="col-xl-6">
-                <mat-label>Locked</mat-label>
-                <mat-select [(ngModel)]="data.locked">
-                    <mat-option *ngFor="let option of YesNoOptions;" [value]="option.value">{{option.text}}</mat-option>
-                </mat-select>
+                <mat-label>Password</mat-label>
+                <input matInput [(ngModel)]="data.password" [type]="hide ? 'password' : 'text'" />
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <!-- <nb-icon icon="hide ? 'visibility_off' : 'visibility'"></nb-icon> -->
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
             </mat-form-field>
             <mat-form-field appearance="fill" class="col-xl-6">
                 <mat-label>Wallet Address</mat-label>

@@ -15,8 +15,10 @@ export class UserCreateComponent implements OnInit {
     { text: 'No', value: false }
   ];
 
+  public hide = true;
+
   public data: any = {
-    
+
   };
 
   ngOnInit(): void {

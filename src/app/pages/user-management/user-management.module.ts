@@ -15,6 +15,8 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { UserCreateComponent } from './user-create/user-create.component';
+import { MatIconModule } from '@angular/material/icon'
+import { NbIconModule } from '@nebular/theme';
 
 @NgModule({
   declarations: [UserManagementComponent, UserEditComponent, UserCreateComponent],
@@ -30,6 +32,8 @@ import { UserCreateComponent } from './user-create/user-create.component';
     MatSelectModule,
     MatDialogModule,
     MatCardModule,
+    MatIconModule,
+    NbIconModule,
   ],
 })
 export class UserManagementModule { }
