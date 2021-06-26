@@ -5,6 +5,7 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { OrderComponent } from './order.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 
