@@ -1,0 +1,6 @@
+<h4 mat-dialog-title>Delete Release</h4>
+<div mat-dialog-content>Do you want to delete {{data.recordNumber}} release</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">Canel</button>
+    <button mat-button [mat-dialog-close]="true">Confirm</button>
+</div>  

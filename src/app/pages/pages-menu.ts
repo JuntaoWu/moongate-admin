@@ -13,6 +13,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/order',
   },
   {
+    title: 'Release',
+    icon: 'home-outline',
+    link: '/pages/release',
+  },
+  {
     title: 'User Management',
     icon: 'home-outline',
     link: '/pages/user-management',

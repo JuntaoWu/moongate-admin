@@ -79,6 +79,8 @@ export class OrderComponent implements OnInit {
       if (result) {
         this.orderService.deleteOrder(order.id).subscribe((data) => {
           this.currentLength = this.orderService.getOrderLength(this.currentFilter);
+          this.limit = 5;
+          this.skip = 0;
           this.orderService.getOrders(this.limit, this.skip, this.currentFilter).subscribe(data => {
             this.displayedColumns = ['position', 'name', 'weight', 'symbol', 'delete']
             const availableOrder = data;
@@ -87,7 +89,7 @@ export class OrderComponent implements OnInit {
           })
         }, (error) => {
           console.error(`error: ${error}`);
-          this._snackBar.open("create new order failed", "dismiss", {
+          this._snackBar.open("create delete order failed", "dismiss", {
             horizontalPosition: "center",
             verticalPosition: "top",
             duration: 3000
