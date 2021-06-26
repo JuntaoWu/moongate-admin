@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { OrderService } from '../order.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TransferService } from '../transfer.service';
 
 interface User {
   value: string;
@@ -9,26 +9,21 @@ interface User {
 }
 
 @Component({
-  selector: 'ngx-order-create',
-  templateUrl: './order-create.component.html',
-  styleUrls: ['./order-create.component.scss']
+  selector: 'ngx-transfer-create',
+  templateUrl: './transfer-create.component.html',
+  styleUrls: ['./transfer-create.component.scss']
 })
-export class OrderCreateComponent implements OnInit {
+export class TransferCreateComponent implements OnInit {
 
   public foods: User[];
   public currentAmount: number;
-  public selectedUser: any;
+  public selectedSenderUser: any;
+  public selectedReceiverUser: any;
   public userList: any
-  constructor(private orderService: OrderService, public dialogRef: MatDialogRef<OrderCreateComponent>,private _snackBar: MatSnackBar) { }
+  constructor(private tranferService: TransferService, public dialogRef: MatDialogRef<TransferCreateComponent>,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    /*this.foods = [
-      { value: 'steak-0', viewValue: 'Steak' },
-      { value: 'pizza-1', viewValue: 'Pizza' },
-      { value: 'tacos-2', viewValue: 'Tacos' }
-    ];*/
-
-    this.orderService.getUserList({ locked: false }).subscribe(data => {
+    this.tranferService.getUserList({ locked: false }).subscribe(data => {
       this.userList = data.map((m) => {
         return {
           value: m.username,
@@ -39,10 +34,10 @@ export class OrderCreateComponent implements OnInit {
   }
 
   onConfirmClick() {
-    this.orderService.createOrder({
-      username: this.selectedUser,
+    this.tranferService.createTransfer({
+      sender: this.selectedSenderUser,
+      receiver: this.selectedReceiverUser,
       amount: this.currentAmount,
-      orderType: "PURCHASE"
     }).subscribe((result) => {
       if (result.data && result.status === 'SUCCESS') {
         this.dialogRef.close();
@@ -56,7 +51,7 @@ export class OrderCreateComponent implements OnInit {
       }
     }, (error) => {
       console.error(`error: ${error}`);
-      this._snackBar.open("create new order failed","dismiss",{
+      this._snackBar.open("create new release failed","dismiss",{
         horizontalPosition:"center",
         verticalPosition:"top",
         duration: 3000

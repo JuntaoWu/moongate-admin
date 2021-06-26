@@ -6,12 +6,12 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
+export class TransferService {
 
   constructor(private http: HttpClient) { }
 
-  getOrders(limit: number, skip: number, filter: any): Observable<any[]> {
-    return this.http.get('/api/orders', {
+  getTransfers(limit: number, skip: number, filter: any): Observable<any[]> {
+    return this.http.get('/api/transfer/admin', {
       params: {
         filter: JSON.stringify({
           limit: limit,
@@ -28,9 +28,9 @@ export class OrderService {
       ));
   }
 
-  getOrderLength(filter: any): Observable<any> {
+  getTransferLength(filter: any): Observable<any> {
 
-    return this.http.get('/api/orders/count', {
+    return this.http.get('/api/transfer/count/admin', {
       params: {
         "where": JSON.stringify(filter)
       }
@@ -42,15 +42,16 @@ export class OrderService {
       ));
   }
 
-  deleteOrder(orderId: string): Observable<any> {
-    return this.http.delete(`/api/orders/${orderId}`)
+
+  deleteTransfer(orderId: string): Observable<any> {
+    return this.http.delete(`/api/transfer/${orderId}`)
       .pipe(map(
         (m: any) => {
           return m;
         }
-      ),catchError((e) => {
+      ), catchError((e) => {
         throw new Error("interal error");
-        
+
       }));
   }
 
@@ -68,17 +69,17 @@ export class OrderService {
       ));
   }
 
-  createOrder(postData: any): Observable<any> {
-    return this.http.post('/api/orders', postData)
+  createTransfer(postData: any): Observable<any> {
+    return this.http.post('/api/transfer/admin', postData)
       .pipe(map(
         (m: any) => {
           return m;
         }
       ),
-      catchError((e) => {
-        throw new Error("interal error");
-        
-      })
+        catchError((e) => {
+          throw new Error(e);
+
+        })
       );
   }
 }

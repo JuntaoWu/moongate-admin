@@ -6,11 +6,11 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
+export class ReleaseService {
 
   constructor(private http: HttpClient) { }
 
-  getOrders(limit: number, skip: number, filter: any): Observable<any[]> {
+  getReleases(limit: number, skip: number, filter: any): Observable<any[]> {
     return this.http.get('/api/orders', {
       params: {
         filter: JSON.stringify({
@@ -28,7 +28,7 @@ export class OrderService {
       ));
   }
 
-  getOrderLength(filter: any): Observable<any> {
+  getReleaseLength(filter: any): Observable<any> {
 
     return this.http.get('/api/orders/count', {
       params: {
@@ -42,7 +42,7 @@ export class OrderService {
       ));
   }
 
-  deleteOrder(orderId: string): Observable<any> {
+  deleteRelease(orderId: string): Observable<any> {
     return this.http.delete(`/api/orders/${orderId}`)
       .pipe(map(
         (m: any) => {
@@ -68,7 +68,7 @@ export class OrderService {
       ));
   }
 
-  createOrder(postData: any): Observable<any> {
+  createRelease(postData: any): Observable<any> {
     return this.http.post('/api/orders', postData)
       .pipe(map(
         (m: any) => {

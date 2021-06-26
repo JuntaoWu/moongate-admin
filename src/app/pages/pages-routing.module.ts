@@ -6,22 +6,24 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { OrderComponent } from './order/order.component';
+import { ReleaseComponent } from './release/release.component';
+import { TransferComponent } from './transfer/transfer.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
     {
-      path: 'dashboard',
-      component: ECommerceComponent,
-    },
-    {
-      path: 'iot-dashboard',
-      component: DashboardComponent,
-    },
-    {
       path: 'order',
       component: OrderComponent,
+    },
+    {
+      path: 'release',
+      component: ReleaseComponent,
+    },
+    {
+      path: 'transfer',
+      component: TransferComponent,
     },
     {
       path: 'user-management',
@@ -80,7 +82,7 @@ const routes: Routes = [{
     },
     {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'order',
       pathMatch: 'full',
     },
     {

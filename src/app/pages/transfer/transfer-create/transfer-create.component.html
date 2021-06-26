@@ -1,0 +1,36 @@
+<h4 mat-dialog-title>Create New Transfer</h4>
+<form name="createForm">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="col-xl-6">
+                <mat-form-field>
+                    <mat-label>Send User</mat-label>
+                    <mat-select [(value)]="selectedSenderUser">
+                        <mat-option *ngFor="let user of userList" [value]="user.value">{{user.viewValue}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+                <mat-form-field>
+                    <mat-label>Receiver User</mat-label>
+                    <mat-select [(value)]="selectedReceiverUser">
+                        <mat-option *ngFor="let user of userList" [value]="user.value">{{user.viewValue}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-xl-6">
+                <mat-form-field>
+                    <mat-label>Ámount</mat-label>
+                    <input matInput name="currentAmount" [(ngModel)]="currentAmount" type="number">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div mat-dialog-actions align="end">
+                <button mat-button (click)="onConfirmClick()">Confirm</button>
+                &nbsp;  &nbsp;
+                <button mat-button [mat-dialog-close]="true">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
