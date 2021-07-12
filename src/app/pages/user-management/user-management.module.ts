@@ -17,6 +17,8 @@ import { MatCardModule } from '@angular/material/card';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { MatIconModule } from '@angular/material/icon'
 import { NbIconModule } from '@nebular/theme';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UserManagementComponent, UserEditComponent, UserCreateComponent],
@@ -34,6 +36,8 @@ import { NbIconModule } from '@nebular/theme';
     MatCardModule,
     MatIconModule,
     NbIconModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
   ],
 })
 export class UserManagementModule { }

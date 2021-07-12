@@ -1,10 +1,23 @@
 <div class="col-xxxl-9 col-xl-12">
     <form name="searchForm">
         <mat-form-field class="example-full-width mr-2" appearance="fill">
-            <input name="username" matInput placeholder="Username" [(ngModel)]="username">
+            <input type="text" placeholder="Username" aria-label="String" matInput [formControl]="usernameControl"
+                [matAutocomplete]="autoUsername">
+            <mat-autocomplete #autoUsername="matAutocomplete">
+                <mat-option *ngFor="let option of filteredUsernameOptions$ | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+            <!-- <input name="username" matInput placeholder="Username" [(ngModel)]="username" #searchUsername> -->
         </mat-form-field>
         <mat-form-field class="example-full-width mr-2" appearance="fill">
-            <input name="email" matInput placeholder="Email" [(ngModel)]="email">
+            <input name="email" matInput placeholder="Email" aria-label="String" [formControl]="emailControl"
+                [matAutocomplete]="autoEmail">
+            <mat-autocomplete #autoEmail="matAutocomplete">
+                <mat-option *ngFor="let option of filteredEmailOptions$ | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
         </mat-form-field>
         <button name="search" class="mr-2" mat-raised-button (click)="search()">Search</button>
         <button name="add" class="mr-2" mat-raised-button (click)="add()">Add</button>

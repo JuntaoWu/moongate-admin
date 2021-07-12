@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap');
 
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(/assets/MaterialIcons-Regular.woff2) format('woff2')
+}
+
 // themes - our custom or/and out of the box themes
 @import 'themes';
 
