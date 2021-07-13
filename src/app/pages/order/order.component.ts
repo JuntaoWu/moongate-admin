@@ -7,6 +7,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrderDeleteConfirmComponent } from './order-delete-confirm/order-delete-confirm.component';
 import { OrderCreateComponent } from './order-create/order-create.component';
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { FormControl } from '@angular/forms';
+import { UserManagementService } from '../user-management/user-management.service';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-order',
@@ -24,7 +27,13 @@ export class OrderComponent implements OnInit {
   public currentFilter: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private orderService: OrderService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
+   // autocomplete
+   public usernameControl = new FormControl();
+   public orderControl = new FormControl();
+   public filteredUsernameOptions$: Observable<string[]>;
+   public filteredOrderOptions$: Observable<string[]>;
+
+  constructor(private orderService: OrderService, public dialog: MatDialog, private _snackBar: MatSnackBar,private userManagementService: UserManagementService) {
     this.currentFilter = {
       "status": "ACTIVE",
       "orderType": "PURCHASE"
@@ -43,6 +52,21 @@ export class OrderComponent implements OnInit {
       this.dataSource = new MatTableDataSource<any>(availableOrder);
       this.dataSource.paginator = this.paginator;
     })
+
+    this.filteredUsernameOptions$ = this.usernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
+
+    this.filteredOrderOptions$ = this.orderControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.orderService.search('recordNumber', searchTerm)),
+    )
+
   }
 
   changePage(event: PageEvent) {
@@ -112,6 +136,8 @@ export class OrderComponent implements OnInit {
   }
 
   onSearchOrder() {
+    this.currentUserName = this.usernameControl.value;
+    this.currentReocrdNumber = this.orderControl.value;
     if (this.currentUserName) {
       this.currentFilter = {
         ...this.currentFilter,

@@ -12,7 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReleaseCreateComponent } from './release-create/release-create.component';
 import { ReleaseDeleteConfirmComponent } from './release-delete-confirm/release-delete-confirm.component';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,7 +28,9 @@ import { ReleaseDeleteConfirmComponent } from './release-delete-confirm/release-
     MatInputModule,
     MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ]
 })
 export class ReleaseModule { }

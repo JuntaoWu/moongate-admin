@@ -7,6 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar'
 import { MatTableDataSource } from '@angular/material/table';
 import { ReleaseCreateComponent } from './release-create/release-create.component';
 import { ReleaseDeleteConfirmComponent } from './release-delete-confirm/release-delete-confirm.component';
+import { FormControl } from '@angular/forms';
+import { UserManagementService } from '../user-management/user-management.service';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-release',
@@ -24,7 +27,13 @@ export class ReleaseComponent implements OnInit {
   public currentFilter: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private releaseService: ReleaseService, public dialog: MatDialog, private _snackBar: MatSnackBar) {
+   // autocomplete
+   public usernameControl = new FormControl();
+   public orderControl = new FormControl();
+   public filteredUsernameOptions$: Observable<string[]>;
+   public filteredOrderOptions$: Observable<string[]>;
+
+  constructor(private releaseService: ReleaseService, public dialog: MatDialog, private _snackBar: MatSnackBar,private userManagementService: UserManagementService) {
     this.currentFilter = {
       "status": "ACTIVE",
       "orderType": "RELEASE"
@@ -39,6 +48,22 @@ export class ReleaseComponent implements OnInit {
       this.dataSource = new MatTableDataSource<any>(availableRelease);
       this.dataSource.paginator = this.paginator;
     })
+
+    
+    this.filteredUsernameOptions$ = this.usernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
+
+    this.filteredOrderOptions$ = this.orderControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.releaseService.search('recordNumber', searchTerm)),
+    )
+
   }
 
   changePage(event: PageEvent) {
@@ -108,6 +133,8 @@ export class ReleaseComponent implements OnInit {
   }
 
   onSearchRelease() {
+    this.currentUserName = this.usernameControl.value;
+    this.currentReocrdNumber = this.orderControl.value;
     if (this.currentUserName) {
       this.currentFilter = {
         ...this.currentFilter,

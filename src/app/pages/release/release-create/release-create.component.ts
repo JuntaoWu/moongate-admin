@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReleaseService } from '../release.service';
+import { UserManagementService } from '../../user-management/user-management.service';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 
 
 interface User {
@@ -21,20 +25,23 @@ export class ReleaseCreateComponent implements OnInit {
   public selectedUser: any;
   public currentTxId: string;
   public userList: any
-  constructor(private releaseService: ReleaseService, public dialogRef: MatDialogRef<ReleaseCreateComponent>,private _snackBar: MatSnackBar) { }
+  // autocomplete
+  public usernameControl = new FormControl();
+  public filteredUsernameOptions$: Observable<string[]>;
+
+  constructor(private releaseService: ReleaseService, public dialogRef: MatDialogRef<ReleaseCreateComponent>,private _snackBar: MatSnackBar,private userManagementService: UserManagementService) { }
 
   ngOnInit(): void {
-    this.releaseService.getUserList({ locked: false }).subscribe(data => {
-      this.userList = data.map((m) => {
-        return {
-          value: m.username,
-          viewValue: m.username
-        }
-      })
-    })
+    this.filteredUsernameOptions$ = this.usernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
   }
 
   onConfirmClick() {
+    this.selectedUser = this.usernameControl.value;
     this.releaseService.createRelease({
       username: this.selectedUser,
       amount: this.currentAmount,

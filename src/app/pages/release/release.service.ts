@@ -81,4 +81,21 @@ export class ReleaseService {
       })
       );
   }
+
+  search(field: string, searchTerm: string) {
+    const whereCondition = {};
+    whereCondition[field] = {
+      like: `${searchTerm}.*`,
+      options: 'i'
+    };
+
+    return this.http.get('/orders', {
+      params: {
+        filter: JSON.stringify({ skip: 0, limit: 10, where: whereCondition, fields: [field] })
+      }
+    }).pipe(map((m: any) => {
+      return m?.data?.map(item => item[field]);
+    }));
+  }
+
 }

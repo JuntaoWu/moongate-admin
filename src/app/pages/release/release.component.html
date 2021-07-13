@@ -2,14 +2,23 @@
     <form name="releaseForm">
         <div class="row col-xl-12">
             <div class="col-xl-9">
-                <mat-form-field>
-                    <mat-label>UserName</mat-label>
-                    <input matInput name="currentUserName" [(ngModel)]="currentUserName" type="string">
+                <mat-form-field class="example-full-width mr-2" appearance="fill">
+                    <input type="text" placeholder="Username" aria-label="String" matInput [formControl]="usernameControl"
+                        [matAutocomplete]="autoUsername">
+                    <mat-autocomplete #autoUsername="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredUsernameOptions$ | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
-                &nbsp; &nbsp;
-                <mat-form-field>
-                    <mat-label>RecordNumber</mat-label>
-                    <input matInput name="currentReocrdNumber" [(ngModel)]="currentReocrdNumber" type="string">
+                <mat-form-field class="example-full-width mr-2" appearance="fill">
+                    <input type="text" placeholder="RecordNumber" aria-label="String" matInput [formControl]="orderControl"
+                        [matAutocomplete]="autoOrder">
+                    <mat-autocomplete #autoOrder="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOrderOptions$ | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
                 &nbsp; &nbsp;
                 <button mat-button (click)="onSearchRelease()">Select</button>

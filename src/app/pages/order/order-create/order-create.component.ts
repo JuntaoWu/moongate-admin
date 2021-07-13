@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { OrderService } from '../order.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserManagementService } from '../../user-management/user-management.service';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 
 interface User {
   value: string;
@@ -19,7 +23,11 @@ export class OrderCreateComponent implements OnInit {
   public currentAmount: number;
   public selectedUser: any;
   public userList: any
-  constructor(private orderService: OrderService, public dialogRef: MatDialogRef<OrderCreateComponent>,private _snackBar: MatSnackBar) { }
+  // autocomplete
+  public usernameControl = new FormControl();
+  public filteredUsernameOptions$: Observable<string[]>;
+  
+  constructor(private orderService: OrderService, public dialogRef: MatDialogRef<OrderCreateComponent>,private _snackBar: MatSnackBar,private userManagementService: UserManagementService) { }
 
   ngOnInit(): void {
     /*this.foods = [
@@ -28,17 +36,16 @@ export class OrderCreateComponent implements OnInit {
       { value: 'tacos-2', viewValue: 'Tacos' }
     ];*/
 
-    this.orderService.getUserList({ locked: false }).subscribe(data => {
-      this.userList = data.map((m) => {
-        return {
-          value: m.username,
-          viewValue: m.username
-        }
-      })
-    })
+    this.filteredUsernameOptions$ = this.usernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
   }
 
   onConfirmClick() {
+    this.selectedUser = this.usernameControl.value;
     this.orderService.createOrder({
       username: this.selectedUser,
       amount: this.currentAmount,
