@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
+import { UserManagementService } from '../user-management/user-management.service';
 import { TransferCreateComponent } from './transfer-create/transfer-create.component';
 import { TransferDeleteConfirmComponent } from './transfer-delete-confirm/transfer-delete-confirm.component';
 import { TransferService } from './transfer.service';
@@ -25,7 +28,15 @@ export class TransferComponent implements OnInit {
   public currentFilter: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private transferService: TransferService, public dialog: MatDialog, private _snackBar: MatSnackBar) { 
+   // autocomplete
+   public senderUsernameControl = new FormControl();
+   public receiverUsernameControl = new FormControl();
+   public orderControl = new FormControl();
+   public filteredSenderUsernameOptions$: Observable<string[]>;
+   public filteredReceiverUsernameOptions$: Observable<string[]>;
+   public filteredOrderOptions$: Observable<string[]>;
+
+  constructor(private transferService: TransferService, public dialog: MatDialog, private _snackBar: MatSnackBar,private userManagementService: UserManagementService) { 
     this.currentFilter = {}
   }
 
@@ -37,6 +48,28 @@ export class TransferComponent implements OnInit {
       this.dataSource = new MatTableDataSource<any>(availableTransfers);
       this.dataSource.paginator = this.paginator;
     })
+
+    this.filteredSenderUsernameOptions$ = this.senderUsernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
+
+    this.filteredReceiverUsernameOptions$ = this.receiverUsernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
+
+    this.filteredOrderOptions$ = this.orderControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.transferService.search('recordNumber', searchTerm)),
+    )
+
   }
 
   changePage(event: PageEvent) {
@@ -105,6 +138,9 @@ export class TransferComponent implements OnInit {
   }
 
   onSearchTransfer() {
+    this.senderUserName = this.senderUsernameControl.value;
+    this.receiverUserName = this.receiverUsernameControl.value;
+    this.reocrdNumber = this.orderControl.value;
     if (this.senderUserName) {
       this.currentFilter = {
         ...this.currentFilter,

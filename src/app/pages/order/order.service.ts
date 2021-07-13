@@ -83,7 +83,7 @@ export class OrderService {
   }
 
   search(field: string, searchTerm: string) {
-    const whereCondition = {};
+    let whereCondition = {"orderType":"PURCHASE","status":"ACTIVE"};
     whereCondition[field] = {
       like: `${searchTerm}.*`,
       options: 'i'
@@ -91,7 +91,7 @@ export class OrderService {
 
     return this.http.get('/orders', {
       params: {
-        filter: JSON.stringify({ skip: 0, limit: 10, where: whereCondition, fields: [field] })
+        filter: JSON.stringify({ skip: 0, limit: 10, where: whereCondition })
       }
     }).pipe(map((m: any) => {
       return m?.data?.map(item => item[field]);

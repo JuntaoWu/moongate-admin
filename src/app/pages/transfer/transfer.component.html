@@ -2,20 +2,34 @@
     <form name="releaseForm">
         <div class="row col-xl-12">
             <div class="col-xl-9">
-                <mat-form-field>
-                    <mat-label>Sender User Name</mat-label>
-                    <input matInput name="senderUserName" [(ngModel)]="senderUserName" type="string">
+                <mat-form-field class="example-full-width mr-2" appearance="fill">
+                    <input type="text" placeholder="Sender User Name" aria-label="String" matInput [formControl]="senderUsernameControl"
+                        [matAutocomplete]="autoSenderUsername">
+                    <mat-autocomplete #autoSenderUsername="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredSenderUsernameOptions$ | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
-                &nbsp; &nbsp;
-                <mat-form-field>
-                    <mat-label>Receiver User Name</mat-label>
-                    <input matInput name="receiverUserName" [(ngModel)]="receiverUserName" type="string">
+                <mat-form-field class="example-full-width mr-2" appearance="fill">
+                    <input type="text" placeholder="Receiver User Name" aria-label="String" matInput [formControl]="receiverUsernameControl"
+                        [matAutocomplete]="autoReceiverUsername">
+                    <mat-autocomplete #autoReceiverUsername="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredReceiverUsernameOptions$ | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
-                &nbsp; &nbsp;
-                <mat-form-field>
-                    <mat-label>RecordNumber</mat-label>
-                    <input matInput name="reocrdNumber" [(ngModel)]="reocrdNumber" type="string">
+                <mat-form-field class="example-full-width mr-2" appearance="fill">
+                    <input type="text" placeholder="RecordNumber" aria-label="String" matInput [formControl]="orderControl"
+                        [matAutocomplete]="autoOrder">
+                    <mat-autocomplete #autoOrder="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOrderOptions$ | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
+
                 &nbsp; &nbsp;
                 <button mat-button (click)="onSearchTransfer()">Select</button>
                 &nbsp; &nbsp;

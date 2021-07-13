@@ -82,4 +82,20 @@ export class TransferService {
         })
       );
   }
+
+  search(field: string, searchTerm: string) {
+    const whereCondition = {};
+    whereCondition[field] = {
+      like: `${searchTerm}.*`,
+      options: 'i'
+    };
+
+    return this.http.get('/transfer/admin', {
+      params: {
+        filter: JSON.stringify({ skip: 0, limit: 10, where: whereCondition })
+      }
+    }).pipe(map((m: any) => {
+      return m?.data?.map(item => item[field]);
+    }));
+  }
 }

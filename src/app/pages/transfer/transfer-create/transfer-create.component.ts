@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
+import { UserManagementService } from '../../user-management/user-management.service';
 import { TransferService } from '../transfer.service';
 
 interface User {
@@ -20,20 +24,32 @@ export class TransferCreateComponent implements OnInit {
   public selectedSenderUser: any;
   public selectedReceiverUser: any;
   public userList: any
-  constructor(private tranferService: TransferService, public dialogRef: MatDialogRef<TransferCreateComponent>,private _snackBar: MatSnackBar) { }
+  public senderUsernameControl = new FormControl();
+  public receiverUsernameControl = new FormControl();
+  public filteredSenderUsernameOptions$: Observable<string[]>;
+  public filteredReceiverUsernameOptions$: Observable<string[]>;
+
+  constructor(private tranferService: TransferService, public dialogRef: MatDialogRef<TransferCreateComponent>,private _snackBar: MatSnackBar,private userManagementService: UserManagementService) { }
 
   ngOnInit(): void {
-    this.tranferService.getUserList({ locked: false }).subscribe(data => {
-      this.userList = data.map((m) => {
-        return {
-          value: m.username,
-          viewValue: m.username
-        }
-      })
-    })
+    this.filteredSenderUsernameOptions$ = this.senderUsernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
+
+    this.filteredReceiverUsernameOptions$ = this.receiverUsernameControl.valueChanges.pipe(
+      filter(searchTerm => searchTerm?.length > 1),
+      debounceTime(100),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.userManagementService.search('username', searchTerm)),
+    );
   }
 
   onConfirmClick() {
+    this.selectedSenderUser = this.senderUsernameControl.value;
+    this.selectedReceiverUser = this.receiverUsernameControl.value;
     this.tranferService.createTransfer({
       sender: this.selectedSenderUser,
       receiver: this.selectedReceiverUser,
