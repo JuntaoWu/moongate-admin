@@ -11,4 +11,5 @@
 export const environment = {
   production: false,
   api: '/api',
+  brandName: 'Networked Admin',
 };

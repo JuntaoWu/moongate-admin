@@ -7,5 +7,6 @@ services:
     image: cepheus990910/moongate_admin:${MOONGATE_ADMIN_VERSION_TAG}
     environment:
       REPLACE_ENV: REPLACE
-      BASE_VIRTUAL_PATH: admin
+      BASE_VIRTUAL_PATH: /admin/
       API_ENV: /api
+      BRAND_NAME: "Networked Admin"

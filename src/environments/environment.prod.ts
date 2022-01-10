@@ -5,5 +5,6 @@
  */
 export const environment = {
   production: true,
-  api: 'http://api.moongate.sfdapp.com'
+  api: 'API_ENV',
+  brandName: 'BRAND_NAME'
 };
